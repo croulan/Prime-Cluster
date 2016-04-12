@@ -1,7 +1,7 @@
 
 struct prime_t {
     int checkPrime; 
-    bool isPrime; 
+    int isPrime; 
 
 }; 
 

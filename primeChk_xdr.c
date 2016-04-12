@@ -12,7 +12,7 @@ xdr_prime_t (XDR *xdrs, prime_t *objp)
 
 	 if (!xdr_int (xdrs, &objp->checkPrime))
 		 return FALSE;
-	 if (!xdr_bool (xdrs, &objp->isPrime))
+	 if (!xdr_int (xdrs, &objp->isPrime))
 		 return FALSE;
 	return TRUE;
 }

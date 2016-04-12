@@ -7,7 +7,7 @@
 #define _PRIMECHK_H_RPCGEN
 
 #include <rpc/rpc.h>
-#include <stdbool.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,7 +16,7 @@ extern "C" {
 
 struct prime_t {
 	int checkPrime;
-	bool isPrime;
+	int isPrime;
 };
 typedef struct prime_t prime_t;
 

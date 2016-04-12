@@ -30,5 +30,5 @@ int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
 
 // run regular algorithm to check the primeness of a number
 int check_Primeness(prime_t* p) {
-    return true;
+    return 0;
 }
