@@ -6,9 +6,9 @@
 
 #include "primeChk.h"
 
-int *
-primeness_1_svc(prime_t *argp, struct svc_req *rqstp)
-{
+int check_Primeness(prime_t*);
+
+int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
 	static int  result;
 
 	/*
@@ -28,6 +28,7 @@ primeness_1_svc(prime_t *argp, struct svc_req *rqstp)
 	return &result;
 }
 
-bool check_Primeness(prime_t p) {
+// run regular algorithm to check the primeness of a number
+int check_Primeness(prime_t* p) {
     return true;
 }
