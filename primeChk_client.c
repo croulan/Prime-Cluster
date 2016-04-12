@@ -7,9 +7,7 @@
 #include "primeChk.h"
 
 
-void
-primeness_prog_1(char *host)
-{
+void primeness_prog_1(char *host, int num) {
 	CLIENT *clnt;
 	int  *result_1;
 	prime_t  primeness_1_arg;
@@ -21,7 +19,7 @@ primeness_prog_1(char *host)
 		exit (1);
 	}
 #endif	/* DEBUG */
-    primeness_1_arg.checkPrime = 10;
+    primeness_1_arg.checkPrime = num;
 
 	result_1 = primeness_1(&primeness_1_arg, clnt);
 	if (result_1 == (int *) NULL) {
@@ -35,13 +33,20 @@ primeness_prog_1(char *host)
 
 int main (int argc, char *argv[]) {
 	char *host;
+    int passed_prime;
 
-	if (argc < 2) {
-		printf ("usage: %s server_host\n", argv[0]);
+	if (argc != 3) {
+		printf ("usage: %s server_host num1\n", argv[0]);
 		exit (1);
 	}
 
-	host = argv[1];
-	primeness_prog_1 (host);
+    if ((passed_prime = atoi(argv[2])) == 0 && *argv[2] != '0') {
+        fprintf(stderr, "invalid value: %s\n", argv[2]);
+        exit(1);
+
+    }
+
+    host = argv[1];
+    primeness_prog_1 (host, passed_prime);
     exit (0);
 }

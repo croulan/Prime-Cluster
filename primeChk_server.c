@@ -9,11 +9,11 @@
 int check_Primeness(prime_t*);
 
 int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
-	static int  result;
+    static int  result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
     printf("%s\n", "Prime checker function called.");
     printf("Evaluating primeness for #%d\n", argp->checkPrime);
 
@@ -25,10 +25,32 @@ int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
         printf("#%d is Prime?: FALSE\n", argp->checkPrime);
     }
 
-	return &result;
+    return &result;
 }
 
 // run regular algorithm to check the primeness of a number
 int check_Primeness(prime_t* p) {
-    return 0;
+    int i;
+
+    // 1 is defined as not prime
+    if ((*p).checkPrime == 1) {
+        return 0;
+    }
+
+    // 2 is prime by defintion
+    if ((*p).checkPrime == 2) {
+        return 1;
+    }
+
+    //Loop through all the numbers and check for a prefect division
+    for (i = 2; i < (*p).checkPrime/2; i++) {
+        if (((*p).checkPrime%i) == 0) { 
+            return 0;
+        }
+    } 
+
+    //If it didn't find a prefect division we found a prime
+    return 1;
 }
+
+
