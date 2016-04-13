@@ -4,6 +4,7 @@
  * as a guideline for developing your own functions.
  */
 
+#include <sys/time.h>
 #include "primeChk.h"
 
 
@@ -34,6 +35,8 @@ void primeness_prog_1(char *host, int num) {
 int main (int argc, char *argv[]) {
 	char *host;
     int passed_prime;
+    struct timeval start, stop;
+    long start_mil, stop_mil;
 
 	if (argc != 3) {
 		printf ("usage: %s server_host num1\n", argv[0]);
@@ -47,6 +50,18 @@ int main (int argc, char *argv[]) {
     }
 
     host = argv[1];
+
+    // start of rpc call
+    gettimeofday(&start,NULL);
     primeness_prog_1 (host, passed_prime);
+
+    // end of rpc call
+    gettimeofday(&stop, NULL); 
+
+    // converts start and stop to miliseconds
+    start_mil = (start.tv_sec)*1000 + (start.tv_usec)/1000;
+    stop_mil = (stop.tv_sec)*1000 + (stop.tv_usec)/1000;
+
+    printf("Execution time of RPC: %ld ms.\n", (stop_mil - start_mil));
     exit (0);
 }
