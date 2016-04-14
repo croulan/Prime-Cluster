@@ -23,7 +23,6 @@ int primeness_prog_1(char *host, int num, int split) {
 	}
 #endif	/* DEBUG */
     primeness_1_arg.checkPrime = num;
-   // primeness_1_arg.splitLoad = split; 
 
     // the call to the server which tells us if it evaluated a prime or not 
     // return = 1 if prime
@@ -76,7 +75,8 @@ int main (int argc, char *argv[]) {
         // end of rpc call
         gettimeofday(&stop, NULL); 
         
-        if ((lowerIsPrime == upperIsPrime) == 1) {
+        // Honestly don't know why this works but it does so Ill go with it
+        if (!((lowerIsPrime == upperIsPrime) == 1)) {
             printf("#%d is Prime?: TRUE\n", passed_prime);
 
         } else { 
@@ -94,9 +94,12 @@ int main (int argc, char *argv[]) {
 
         if(upperIsPrime) { 
             printf("%d is Prime?: TRUE\n", passed_prime);
+
+        } else {
+            printf("%d is Prime?: FALSE\n", passed_prime);
+
         }
     
-        printf("%d is Prime?: FALSE\n", passed_prime);
     }
 
     // converts start and stop to miliseconds

@@ -17,7 +17,6 @@ extern "C" {
 struct prime_t {
 	int checkPrime;
 	int isPrime;
-    int 
 };
 typedef struct prime_t prime_t;
 
