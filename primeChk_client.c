@@ -5,10 +5,12 @@
  */
 
 #include <sys/time.h>
+#include <math.h>
 #include "primeChk.h"
 
+int checkLowerPrimeness(int);
 
-void primeness_prog_1(char *host, int num) {
+int primeness_prog_1(char *host, int num, int split) {
 	CLIENT *clnt;
 	int  *result_1;
 	prime_t  primeness_1_arg;
@@ -21,20 +23,32 @@ void primeness_prog_1(char *host, int num) {
 	}
 #endif	/* DEBUG */
     primeness_1_arg.checkPrime = num;
+   // primeness_1_arg.splitLoad = split; 
 
+    // the call to the server which tells us if it evaluated a prime or not 
+    // return = 1 if prime
 	result_1 = primeness_1(&primeness_1_arg, clnt);
 	if (result_1 == (int *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
+
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
+
+    if(*result_1) { 
+        return 1;   // server side is prime
+    } else { 
+        return 0;   // server side is not prime 
+    }
+
 }
 
-
+// Client side of the program will check the lower bound of the computation of 
+// the prime.
 int main (int argc, char *argv[]) {
 	char *host;
-    int passed_prime;
+    int passed_prime, lowerIsPrime, upperIsPrime;
     struct timeval start, stop;
     long start_mil, stop_mil;
 
@@ -51,12 +65,39 @@ int main (int argc, char *argv[]) {
 
     host = argv[1];
 
-    // start of rpc call
-    gettimeofday(&start,NULL);
-    primeness_prog_1 (host, passed_prime);
+    // check to see if passed_prime is big enough to split load calculation
+    if (passed_prime >=10000) {
+        lowerIsPrime = checkLowerPrimeness((int) floor(passed_prime/2));
 
-    // end of rpc call
-    gettimeofday(&stop, NULL); 
+        // start of rpc call
+        gettimeofday(&start,NULL);
+        upperIsPrime = primeness_prog_1 (host, passed_prime, 1);
+
+        // end of rpc call
+        gettimeofday(&stop, NULL); 
+        
+        if ((lowerIsPrime == upperIsPrime) == 1) {
+            printf("#%d is Prime?: TRUE\n", passed_prime);
+
+        } else { 
+            printf("#%d is Prime?: FLASE\n", passed_prime);
+            
+        }
+
+    } else {
+        // start of rpc call
+        gettimeofday(&start,NULL);
+        upperIsPrime = primeness_prog_1 (host, passed_prime,0);
+
+        // end of rpc call
+        gettimeofday(&stop, NULL); 
+
+        if(upperIsPrime) { 
+            printf("%d is Prime?: TRUE\n", passed_prime);
+        }
+    
+        printf("%d is Prime?: FALSE\n", passed_prime);
+    }
 
     // converts start and stop to miliseconds
     start_mil = (start.tv_sec)*1000 + (start.tv_usec)/1000;
@@ -64,4 +105,22 @@ int main (int argc, char *argv[]) {
 
     printf("Execution time of RPC: %ld ms.\n", (stop_mil - start_mil));
     exit (0);
+}
+
+// If upper limit does not have any perfect divisors, return 1 else 0
+int checkLowerPrimeness(int upperLimit){
+    int i; 
+
+    printf("%s\n", "Checking lower limit function invoked");
+    for (i = 2; i<upperLimit/2; i++) {
+        if (upperLimit%i == 0) {
+            // found a perfect divisor
+            return 0;
+
+        }
+
+    }
+
+    return 1;
+
 }

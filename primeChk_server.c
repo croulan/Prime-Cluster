@@ -10,6 +10,7 @@ int check_Primeness(prime_t*);
 
 int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
     static int  result;
+    result = 0;
 
     /*
      * insert server code here
@@ -19,8 +20,12 @@ int * primeness_1_svc(prime_t *argp, struct svc_req *rqstp) {
 
     argp->isPrime = check_Primeness(argp);
 
+    // if result is prime, return result = 1; otherwise result = 0
     if(argp->isPrime){ 
         printf("#%d is Prime?: TRUE\n", argp->checkPrime);
+        result = 1; 
+        return &result;
+
     } else {
         printf("#%d is Prime?: FALSE\n", argp->checkPrime);
     }
